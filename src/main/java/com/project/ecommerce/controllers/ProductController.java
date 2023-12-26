@@ -35,10 +35,14 @@ public class ProductController {
     public ProductDTO updateProductinClient(@RequestBody GenericProductDTO genericProductDTO, @PathVariable("id") Long id) {
         return productService.updateProduct(genericProductDTO, id);
     }
-    public ProductDTO replaceProductinClient(GenericProductDTO genericProductDTO, Long id) {
-        return null;
+
+    @PutMapping("{id}")
+    public ProductDTO replaceProductinClient(@RequestBody GenericProductDTO genericProductDTO, @PathVariable("id") Long id) {
+        return productService.replaceProduct(genericProductDTO, id);
     }
-    public ProductDTO deleteProductFromClient(Long id) {
-        return null;
+
+    @DeleteMapping("{id}")
+    public ProductDTO deleteProductFromClient(@PathVariable("id") Long id) {
+        return productService.deleteProduct(id);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -55,16 +56,43 @@ public class FakeStoreProductClientService implements ThirdPartyClientProductSer
     @Override
     public FakeStoreResponseDTO updateProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, Long id) {
         String apiUrl = baseUrl.concat("/{id}");
-        return restTemplate.patchForObject(apiUrl, fakeStoreRequestDTO, FakeStoreResponseDTO.class, id);
+        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(id).toUri();
+        RequestEntity<FakeStoreRequestDTO> requestEntity = RequestEntity
+                .patch(baseUrl)
+                .body(fakeStoreRequestDTO);
+
+        ResponseEntity<FakeStoreResponseDTO> responseEntity = restTemplate.exchange(
+                requestEntity,
+                FakeStoreResponseDTO.class);
+
+        return responseEntity.getBody();
     }
 
     @Override
     public FakeStoreResponseDTO replaceProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, Long id) {
-        return null;
+        String apiUrl = baseUrl.concat("/{id}");
+        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(id).toUri();
+        RequestEntity<FakeStoreRequestDTO> requestEntity = RequestEntity
+                .put(uri)
+                .body(fakeStoreRequestDTO);
+
+        ResponseEntity<FakeStoreResponseDTO> responseEntity = restTemplate.exchange(
+                requestEntity,
+                FakeStoreResponseDTO.class);
+
+        return responseEntity.getBody();
     }
 
     @Override
     public FakeStoreResponseDTO deleteProductFromClient(Long id) {
-        return null;
+        String apiUrl = baseUrl.concat("/{id}");
+        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(id).toUri();
+        RequestEntity<Void> requestEntity = RequestEntity.delete(apiUrl, id).build();
+
+        ResponseEntity<FakeStoreResponseDTO> responseEntity = restTemplate.exchange(
+                requestEntity,
+                FakeStoreResponseDTO.class);
+
+        return responseEntity.getBody();
     }
 }

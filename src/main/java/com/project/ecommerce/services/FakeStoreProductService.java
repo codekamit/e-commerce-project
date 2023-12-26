@@ -49,11 +49,14 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public ProductDTO replaceProduct(GenericProductDTO genericProductDTO, Long id) {
-        return null;
+        FakeStoreRequestDTO fakeStoreRequestDTO = ServiceUtil.convertToClientRequest(genericProductDTO);
+        FakeStoreResponseDTO fakeStoreResponseDTO = thirdPartyClientProductServiceService.replaceProductInClient(fakeStoreRequestDTO, id);
+        return ServiceUtil.convertFromClientResponse(fakeStoreResponseDTO);
     }
 
     @Override
     public ProductDTO deleteProduct(Long id) {
-        return null;
+        FakeStoreResponseDTO fakeStoreResponseDTO = thirdPartyClientProductServiceService.deleteProductFromClient(id);
+        return ServiceUtil.convertFromClientResponse(fakeStoreResponseDTO);
     }
 }
