@@ -23,7 +23,8 @@ public class FakeStoreProductClientService implements ThirdPartyClientProductSer
     @Value("${productbaseurl}")
     private String baseUrl;
     private RestTemplate restTemplate;
-    public FakeStoreProductClientService(RestTemplate restTemplate) {
+    public FakeStoreProductClientService(RestTemplate restTemplate,
+                                         @Value("${productbaseurl}") String baseUrl) {
         this.restTemplate = restTemplate;
     }
     @Override
