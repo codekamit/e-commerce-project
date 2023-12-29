@@ -5,14 +5,15 @@ import com.project.ecommerce.client.DTOs.FakeStoreResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public interface ThirdPartyClientProductService {
     List<FakeStoreResponseDTO> getAllProductsFromClient();
-    FakeStoreResponseDTO getProductFromClient(Long id);
+    FakeStoreResponseDTO getProductFromClient(UUID productId);
     FakeStoreResponseDTO addNewProductToClient(FakeStoreRequestDTO fakeStoreRequestDTO);
-    FakeStoreResponseDTO updateProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, Long id);
-    FakeStoreResponseDTO replaceProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, Long id);
-    FakeStoreResponseDTO deleteProductFromClient(Long id);
+    FakeStoreResponseDTO updateProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, UUID productId);
+    FakeStoreResponseDTO replaceProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, UUID productId);
+    FakeStoreResponseDTO deleteProductFromClient(UUID productId);
 
 }

@@ -8,14 +8,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class FakeStoreProductClientService implements ThirdPartyClientProductService {
@@ -36,9 +34,9 @@ public class FakeStoreProductClientService implements ThirdPartyClientProductSer
     }
 
     @Override
-    public FakeStoreResponseDTO getProductFromClient(Long id) {
+    public FakeStoreResponseDTO getProductFromClient(UUID productId) {
         String apiUrl = baseUrl.concat("/{id}");
-        return restTemplate.getForObject(apiUrl, FakeStoreResponseDTO.class, id);
+        return restTemplate.getForObject(apiUrl, FakeStoreResponseDTO.class, productId);
     }
 
     @Override
@@ -55,9 +53,9 @@ public class FakeStoreProductClientService implements ThirdPartyClientProductSer
     }
 
     @Override
-    public FakeStoreResponseDTO updateProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, Long id) {
+    public FakeStoreResponseDTO updateProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, UUID productId) {
         String apiUrl = baseUrl.concat("/{id}");
-        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(id).toUri();
+        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(productId).toUri();
         RequestEntity<FakeStoreRequestDTO> requestEntity = RequestEntity
                 .patch(baseUrl)
                 .body(fakeStoreRequestDTO);
@@ -70,9 +68,9 @@ public class FakeStoreProductClientService implements ThirdPartyClientProductSer
     }
 
     @Override
-    public FakeStoreResponseDTO replaceProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, Long id) {
+    public FakeStoreResponseDTO replaceProductInClient(FakeStoreRequestDTO fakeStoreRequestDTO, UUID productId) {
         String apiUrl = baseUrl.concat("/{id}");
-        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(id).toUri();
+        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(productId).toUri();
         RequestEntity<FakeStoreRequestDTO> requestEntity = RequestEntity
                 .put(uri)
                 .body(fakeStoreRequestDTO);
@@ -85,10 +83,10 @@ public class FakeStoreProductClientService implements ThirdPartyClientProductSer
     }
 
     @Override
-    public FakeStoreResponseDTO deleteProductFromClient(Long id) {
+    public FakeStoreResponseDTO deleteProductFromClient(UUID productId) {
         String apiUrl = baseUrl.concat("/{id}");
-        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(id).toUri();
-        RequestEntity<Void> requestEntity = RequestEntity.delete(apiUrl, id).build();
+        URI uri = UriComponentsBuilder.fromUriString(apiUrl).buildAndExpand(productId).toUri();
+        RequestEntity<Void> requestEntity = RequestEntity.delete(apiUrl, productId).build();
 
         ResponseEntity<FakeStoreResponseDTO> responseEntity = restTemplate.exchange(
                 requestEntity,

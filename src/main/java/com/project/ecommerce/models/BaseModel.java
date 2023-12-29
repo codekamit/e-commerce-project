@@ -2,9 +2,17 @@ package com.project.ecommerce.models;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
+import java.util.UUID;
+
+@Getter
+@Setter
 @MappedSuperclass
 public class BaseModel {
     @Id
-    private Long id;
+    @UuidGenerator(style = UuidGenerator.Style.RANDOM)
+    private UUID id;
 }

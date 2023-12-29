@@ -4,17 +4,16 @@ import com.project.ecommerce.DTOs.GenericProductDTO;
 import com.project.ecommerce.DTOs.ProductDTO;
 import com.project.ecommerce.client.DTOs.FakeStoreRequestDTO;
 import com.project.ecommerce.client.DTOs.FakeStoreResponseDTO;
-import com.project.ecommerce.client.services.FakeStoreProductClientService;
 import com.project.ecommerce.client.services.ThirdPartyClientProductService;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class FakeStoreProductService implements ProductService {
-    private ThirdPartyClientProductService thirdPartyClientProductServiceService;
+    private final ThirdPartyClientProductService thirdPartyClientProductServiceService;
     public FakeStoreProductService(ThirdPartyClientProductService thirdPartyClientProductService) {
         this.thirdPartyClientProductServiceService = thirdPartyClientProductService;
     }
@@ -28,8 +27,8 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public ProductDTO getProduct(Long id) {
-        var response = thirdPartyClientProductServiceService.getProductFromClient(id);
+    public ProductDTO getProduct(UUID productId) {
+        var response = thirdPartyClientProductServiceService.getProductFromClient(productId);
         return ServiceUtil.convertFromClientResponse(response);
     }
 
@@ -41,22 +40,26 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(GenericProductDTO genericProductDTO, Long id) {
+    public ProductDTO updateProduct(GenericProductDTO genericProductDTO, UUID productId) {
         FakeStoreRequestDTO fakeStoreRequestDTO = ServiceUtil.convertToClientRequest(genericProductDTO);
-        FakeStoreResponseDTO fakeStoreResponseDTO = thirdPartyClientProductServiceService.updateProductInClient(fakeStoreRequestDTO, id);
+        FakeStoreResponseDTO fakeStoreResponseDTO = thirdPartyClientProductServiceService.updateProductInClient(fakeStoreRequestDTO, productId);
         return ServiceUtil.convertFromClientResponse(fakeStoreResponseDTO);
     }
 
     @Override
-    public ProductDTO replaceProduct(GenericProductDTO genericProductDTO, Long id) {
+    public ProductDTO replaceProduct(GenericProductDTO genericProductDTO, UUID productId) {
         FakeStoreRequestDTO fakeStoreRequestDTO = ServiceUtil.convertToClientRequest(genericProductDTO);
-        FakeStoreResponseDTO fakeStoreResponseDTO = thirdPartyClientProductServiceService.replaceProductInClient(fakeStoreRequestDTO, id);
+        FakeStoreResponseDTO fakeStoreResponseDTO = thirdPartyClientProductServiceService.replaceProductInClient(fakeStoreRequestDTO, productId);
         return ServiceUtil.convertFromClientResponse(fakeStoreResponseDTO);
     }
 
     @Override
-    public ProductDTO deleteProduct(Long id) {
-        FakeStoreResponseDTO fakeStoreResponseDTO = thirdPartyClientProductServiceService.deleteProductFromClient(id);
-        return ServiceUtil.convertFromClientResponse(fakeStoreResponseDTO);
+    public void deleteProduct(UUID productId) {
+        FakeStoreResponseDTO fakeStoreResponseDTO = thirdPartyClientProductServiceService.deleteProductFromClient(productId);
+    }
+
+    @Override
+    public void addAllProducts(List<GenericProductDTO> newProducts) {
+        newProducts.forEach(this::addNewProduct);
     }
 }
